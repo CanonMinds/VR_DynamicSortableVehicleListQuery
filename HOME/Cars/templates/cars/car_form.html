@@ -1,0 +1,41 @@
+{% extends 'cars/base.html' %}
+
+{% block content %}
+
+<div>
+	<div>
+	<h3 class="title">ADD NEW VEHICLE</h3>
+	<div class="title-content">
+		<div class="mt-5 one">
+		<form class="This" method="post">{% csrf_token %}
+		
+		    {{ form.as_p }}
+	    
+	    <input class=" press mt-5 mx-1 btn btn-success btn-block" type="submit" value="ADD" />
+	</form>
+	</div>
+	<a class="press mt-3 mx-1 btn btn-outline-danger btn-block" href="{% url "car_list" %}">BACK</a>
+	</div>
+	<div>
+</div>
+
+<style>
+.title{
+	margin-top: 10px;
+	text-align: center;
+	letter-spacing: 3px;
+}
+
+.title-content{
+	text-align: center
+}]
+ 
+.press{
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.btn{
+	border-radius: 100px;
+}
+</style>
+{% endblock %}

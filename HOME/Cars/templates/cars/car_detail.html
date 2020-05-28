@@ -1,0 +1,32 @@
+{% extends 'cars/base.html' %}
+
+{% block content %}
+
+<h3 class="title">VEHICLE DETAIL</h3>
+<h3 class="title-content">Vehicle Color:<br> {{object.name}}</h3>
+<a class="press mt-5 mx-1 btn btn-outline-danger btn-block" href="{% url "car_list" %}">BACK</a>
+
+
+<style>
+.title{
+	margin-top: 20px;
+	text-align: center;
+	letter-spacing: 3px;
+}
+
+.title-content{
+	margin-top:30px;
+	text-align: center;
+	color:#696969	;
+}]
+ 
+.press{
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.btn{
+	border-radius: 100px;
+}
+</style>
+
+{% endblock %}

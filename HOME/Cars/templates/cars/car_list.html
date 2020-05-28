@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> 
+  <title>List of Car Query</title>
+
+<style>
+.handle {
+    display: inline-block;
+    border-top: 3px solid var(--dark);
+    width: 30px;
+    padding-top: 5px;
+    cursor: grab;
+}
+.handle:after, .handle:before {
+    display: block;
+    content: "";
+    padding-top: 5px;
+    border-top: 3px solid var(--dark);
+}
+.handle:hover, .handle:hover:before, .handle:hover:after {
+    border-color: var(--primary);
+}
+.handle:active, .handle:active:before, .handle:active:after {
+    cursor: grabbing;
+}
+</style>
+</head>
+
+<body class="mt-5 col-lg-8 col-md-8 col-sm-12"  style=" float:none; margin:auto;">
+
+    <h1 class="text-center">List of Current Vehicles</h1>
+    <div class="">
+
+        <p class="text-center mt-5">Feel free to add new cars! You may also try to drag and re-arrange your generated list. </p>
+        <a href="{% url "car_new" %}" class="mt-3 btn btn-info btn-block">ADD NEW CAR to CART</a>
+        <div class="d-flex justify-content-around">
+        <button class="mt-3 mx-1 btn btn-outline-warning btn-block" id="all-cars-btn">Show All Cars</button>
+        <button class="mt-3 mx-1 btn btn-outline-primary btn-block" id="blue-cars-btn">Show Blue Cars</button>
+        <button class="mt-3 mx-1 btn btn-outline-danger btn-block" id="red-cars-btn">Show Red Cars</button>
+        <button class="mt-3 mx-1 btn btn-outline-success btn-block" id="green-cars-btn">Show Green Cars</button>
+        </div>
+
+        <button id="saveOrdering" class="btn btn-outline-primary btn-block mt-3">Save ordering</button>
+
+    </div>
+
+  <table class="table table-hover mt-5">
+    <thead class="table table-dark text-center">
+        <tr>
+        <th>List</th>
+        <th>Current Order</th>
+        <th>ID</th> 
+        <th>Profile Image</th>    
+        <th>View</th>
+        <th>Edit</th>
+        <th>Delete</th>
+        </tr>
+    </thead>
+  <tbody id="groups">
+    {% for car in object_list %}
+
+    <tr data-lookup="{{ car.lookup_id }}">
+        <td>
+            <span class="handle"></span>
+        </td>
+        <td class="text-center"> {{ car.order }} </td>
+        <td><strong>{{ car.id }}</strong></td>
+        <td>
+        
+        {% if car.name == "Blue Car" %}
+            <img src="https://image.shutterstock.com/image-illustration/blue-generic-sedan-car-isolated-600w-673558765.jpg" alt="a" width="120">
+        {% elif car.name == "Red Car" %}
+            <img src="https://media.istockphoto.com/photos/illustration-of-red-generic-sports-coupe-car-on-white-picture-id942526180?k=6&m=942526180&s=612x612&w=0&h=_rhDltH6C2L0kUJBOBVCy5kqGfFm2aE45DvvdJBET24=" alt="a" width="120">
+        {% else %}
+            <img src="https://webstockreview.net/images/clipart-car-green-5.png" alt="a" width="120">
+        {% endif %}
+        
+        </td>
+        <td><a href="{% url "car_view" car.id %}" class="btn btn-outline-dark btn-block">View</a></td>
+        <td><a href="{% url "car_edit" car.id %}" class="btn btn-outline-dark btn-block">Edit</a></td>
+        <td><a href="{% url "car_delete" car.id %}" class="btn btn-dark btn-block">Delete</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+
+        <form id="orderingForm" method="post" action="{% url 'save-group-ordering' %}">
+            {% csrf_token %}
+        <input type="hidden" id="orderingInput" name="ordering">
+        </form>
+
+    <tbody id="table-blue" style="display:none">       
+        {% for car in object_list %}
+            {% if car.name == "Blue Car" %}
+            <tr>
+                <td><span class="handle"></span></td>
+                <td class="text-center"> {{ car.order }} </td>
+                <td>{{ car.id }}</td>
+                <td>{% if car.name == "Blue Car" %}
+                <img src="https://image.shutterstock.com/image-illustration/blue-generic-sedan-car-isolated-600w-673558765.jpg" alt="a" width="120">
+            {% endif %}
+            </td>
+
+            
+            <td><a href="{% url "car_view" car.id %}" class="btn btn-outline-primary btn-block"> View </a></td>
+            <td><a href="{% url "car_edit" car.id %}" class="btn btn-outline-primary btn-block"> Edit </a></td>
+            <td><a href="{% url "car_delete" car.id %}" class="btn btn-primary btn-block"> Delete </a></td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+
+    <tbody id="table-red" style="display:none">       
+        {% for car in object_list %}
+            {% if car.name == "Red Car" %}
+                <tr>
+                <td><span class="handle"></span></td>  
+                <td class="text-center"> {{ car.order }} </td>
+                <td>{{ car.id }}</td>
+                <td>{% if car.name == "Red Car" %}
+                <img src="https://media.istockphoto.com/photos/illustration-of-red-generic-sports-coupe-car-on-white-picture-id942526180?k=6&m=942526180&s=612x612&w=0&h=_rhDltH6C2L0kUJBOBVCy5kqGfFm2aE45DvvdJBET24="alt="a" width="120">
+            {% endif %}
+            </td>
+
+            <td><a href="{% url "car_view" car.id %}" class="btn btn-outline-danger btn-block">View</a></td>
+            <td><a href="{% url "car_edit" car.id %}" class="btn btn-outline-danger btn-block">Edit</a></td>
+            <td><a href="{% url "car_delete" car.id %}" class="btn btn-danger btn-block">Delete</a></td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+
+    <tbody id="table-green" style="display:none">       
+        {% for car in object_list %}
+            {% if car.name == "Green Car" %}
+                <tr>
+                <td><span class="handle"></span></td>  
+                <td class="text-center"> {{ car.order }} </td>
+                <td>{{ car.id }}</td>
+                <td>{% if car.name == "Green Car" %}
+                <img src="https://webstockreview.net/images/clipart-car-green-5.png" alt="a" width="120">
+            {% endif %}
+            </td>
+
+            <td><a href="{% url "car_view" car.id %}" class="btn btn-outline-success btn-block">View</a></td>
+            <td><a href="{% url "car_edit" car.id %}" class="btn btn-outline-success btn-block">Edit</a></td>
+            <td><a href="{% url "car_delete" car.id %}" class="btn btn-success btn-block">Delete</a></td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+
+      
+</table>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+      <!-- Sortable.js -->
+    <!-- <script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
+     -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
+    <script type="text/javascript"> 
+        document.getElementById("blue-cars-btn").onclick = function() { 
+            $("#blue-cars").toggle();
+            $("#table-blue").toggle();
+            $("#table-green").hide();
+            $("#table-red").hide();
+            $("#groups").hide();
+        }           
+        document.getElementById("red-cars-btn").onclick = function() { 
+            $("#red-cars").toggle();
+            $("#table-red").toggle();
+            $("#table-blue").hide();
+            $("#table-green").hide();
+            $("#groups").hide();
+        }
+        document.getElementById("green-cars-btn").onclick = function() { 
+            $("#green-cars").toggle();
+            $("#table-green").toggle();
+            $("#table-red").hide();
+            $("#table-blue").hide();
+            $("#groups").hide();
+        }
+        document.getElementById("all-cars-btn").onclick = function() { 
+            $("#groups").toggle();
+            $("#table-blue").hide();
+            $("#table-red").hide();
+            $("#table-green").hide();
+        } 
+    </script>
+
+    <script type="text/javascript">
+      const groups = document.getElementById('groups');
+          let sortable = Sortable.create(groups, {
+            // group: 'groups',
+            handle: '.handle',
+            animation: 100,
+            dragClass: 'dragged',
+            chosenClass: 'sortableChosen',
+            onChange: () => {
+                  saveOrderingButton.disabled = false;
+            }
+      });
+    </script>
+    <script type="text/javascript">  
+
+        const saveOrderingButton = document.getElementById('saveOrdering');
+        const orderingForm = document.getElementById('orderingForm');
+        // formInput = orderingForm.querySelector('#orderingInput');
+        saveOrderingButton.addEventListener('click', saveOrdering);
+
+
+      function saveOrdering() {
+        confirm("Save Ordering");
+        const rows = document.getElementById("groups").querySelectorAll('tr');
+        console.log("These are row count");
+        console.log(rows.length);
+        let ids = [];
+        for (let row of rows) {
+            
+            ids.push(row.dataset.lookup);
+            //Import Lookup
+            //Compile
+        }
+        orderingInput.value = ids.join(',');
+        console.log("ROW LIST:");
+        console.log(orderingInput.value);
+        orderingForm.submit();
+        alert("Submitted");
+      }
+      
+    </script>
+</body>
+</html>
